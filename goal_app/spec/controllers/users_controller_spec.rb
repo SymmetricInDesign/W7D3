@@ -11,8 +11,9 @@ RSpec.describe UsersController, type: :controller do
     end
 
     describe "GET#show" do
+        let!(:test_user) { FactoryBot.create(:user) }
         it "should render the user with the given id" do
-            get :show
+            get :show, params: {id: test_user.id}
 
             expect(response).to render_template("show") # view will render user's page
             expect(response).to have_http_status(200)
@@ -42,13 +43,12 @@ RSpec.describe UsersController, type: :controller do
 
             it "should not save a user to the database" do
                 post :create, params: invalid_params
-                expect(User.last.email).not_to eq(invalid_params[:user][:email])
+                expect(User.find_by(email: valid_params[:user][:email])).to eq(nil)
             end
 
             it "should redirect to the new_user_url" do
                 post :create, params: invalid_params
                 expect(response).to have_http_status(422)
-                expect(response).to redirect_to(new_user_url)
             end
         end
     end
