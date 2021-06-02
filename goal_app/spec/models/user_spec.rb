@@ -27,9 +27,6 @@ RSpec.describe User, type: :model do
     it "should return nil if the credentials don't match" do
       expect(User.find_by_credentials(user.email, "freddyyyy")).to eq(nil)
     end
-
-
-
   end
 
   
